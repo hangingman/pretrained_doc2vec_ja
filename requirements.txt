@@ -1,0 +1,8 @@
+gensim==4.3.2
+mecab-python3==1.0.9
+numpy==1.26.4
+scipy==1.13.0
+smart-open==7.0.4
+tqdm==4.66.4
+unidic-lite==1.0.8
+wrapt==1.16.0
