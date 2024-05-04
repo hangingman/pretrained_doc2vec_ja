@@ -1,5 +1,4 @@
 import argparse
-import bz2
 import gzip
 import json
 
@@ -14,27 +13,29 @@ def count_lines_in_gzip_file(file_path):
 
 
 def parse(args):
-    wakati = MeCab.Tagger("-O wakati")
+    wakati: MeCab.Tagger = MeCab.Tagger("-O wakati")
     wakati.parse("")
 
     total_lines = count_lines_in_gzip_file(args.input)
-    with gzip.open(args.input) as fin:
-        with bz2.open(args.output, 'wt') as fout:
+    with open(args.output, mode='wt', encoding='utf8') as fout:
+        with gzip.open(args.input) as fin:
             for line in tqdm(fin, total=total_lines):
                 json_line = json.loads(line)
                 if "index" not in json_line:
-                    title = json_line["title"]
+                    title = json_line["title"]  # SENTENCE_IDENTIFIER
                     text = json_line["text"]
-
-                    if title and text:
-                        print("\t".join([title, wakati.parse(text).strip()]), file=fout)
+                    words = [line for line in wakati.parse(text).strip().split(" ")]
+                    line_sentence = [title] + words
+                    fout.write(" ".join(line_sentence))
+                    fout.write("\n")
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description="wikipediaのデータセットをパースしてTSV化する")
+    parser = argparse.ArgumentParser(description="wikipediaのデータセットをパースしてLineSentence formatで保存する")
     parser.add_argument("-i", "--input", type=str, required=True,
                         help="wikipediaのJSONファイルのパス e.g. 'data/jawiki-20190114-cirrussearch-content.json.gz'")
     parser.add_argument("-o", "--output", type=str, required=True,
-                        help="タイトルとテキストをTSV化したファイルの出力先パス e.g. 'data/20190114cirrus_all.tsv.bz2'")
+                        help="""タイトルとテキストをLineSentence format化したファイルの出力先パス
+                        e.g. 'data/20190114-cirrus-all-corpus.txt'""")
     args = parser.parse_args()
     parse(args)

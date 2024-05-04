@@ -1,11 +1,8 @@
-import bz2
-import pickle
-import logging
 import argparse
+import bz2
+import logging
 
-from tqdm import tqdm
 from gensim.models.doc2vec import Doc2Vec
-from gensim.models.doc2vec import TaggedDocument
 
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 logging.root.setLevel(level=logging.INFO)
@@ -18,15 +15,6 @@ def count_lines_in_bz_file(file_path):
 
 
 def train(args):
-    documents = []
-    total_lines = count_lines_in_bz_file(args.input)
-    with bz2.open(args.input, 'rt') as f:
-        for line in tqdm(f, total=total_lines):
-            l = line.strip().split("\t")
-            title = l[0]
-            text = l[1].split(" ")
-            documents.append(TaggedDocument(text, [title]))
-
     settings = {
         "dbow300d": {"vector_size": 300,
                      "epochs": 20,
@@ -46,7 +34,7 @@ def train(args):
     }
 
     for setting_name, setting in settings.items():
-        model = Doc2Vec(documents=documents, **setting)
+        model = Doc2Vec(corpus_file=args.input, **setting)
         model.save(f"model/jawiki.doc2vec.{setting_name}.model")
         model.save_word2vec_format(f"model/jawiki.doc2vec.{setting_name}.model.bin",
                                    doctag_vec=True,
@@ -57,6 +45,7 @@ def train(args):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="doc2vecをトレーニングする")
     parser.add_argument("-i", "--input", type=str, required=True,
-                        help="タイトルとテキストをTSV化したファイルのパス e.g. 'data/20190114cirrus_all.tsv.bz2'")
+                        help="""タイトルとテキストをLineSentence format化したファイルのパス 
+                        e.g. 'data/20190114-cirrus-all-corpus.txt'""")
     args = parser.parse_args()
     train(args)

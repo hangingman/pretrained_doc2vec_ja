@@ -55,7 +55,6 @@ $ python ./src/train.py -i /path/to/20240422-cirrus_all.tsv.bz2
 
 - Tokenizer
   - mecab-python3: 1.0.9
-  - NEologd: Periodic data update on 2019-01-17(Thu)
 
 - requirements
   - gensim: 3.7.0
