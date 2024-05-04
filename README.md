@@ -29,6 +29,7 @@ $ pip install -r requirements.txt
 
 ```shell
 $ python ./src/parse_cirrus.py -i /path/to/jawiki-20240422-cirrussearch-content.json.gz -o /path/to/20240422-cirrus_all.tsv.bz2
+$ python ./src/train.py -i /path/to/20240422-cirrus_all.tsv.bz2
 ```
 
 

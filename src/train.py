@@ -10,10 +10,18 @@ from gensim.models.doc2vec import TaggedDocument
 logging.basicConfig(format='%(asctime)s : %(levelname)s : %(message)s', level=logging.INFO)
 logging.root.setLevel(level=logging.INFO)
 
-if __name__ == '__main__':
+
+def count_lines_in_bz_file(file_path):
+    with bz2.open(file_path, 'rt') as f:
+        line_count = sum(1 for line in f)
+    return line_count
+
+
+def train(args):
     documents = []
-    with bz2.open("data/20190114cirrus_all.tsv.bz2", 'rt') as f:
-        for line in tqdm(f, total=1135267):
+    total_lines = count_lines_in_bz_file(args.input)
+    with bz2.open(args.input, 'rt') as f:
+        for line in tqdm(f, total=total_lines):
             l = line.strip().split("\t")
             title = l[0]
             text = l[1].split(" ")
@@ -44,3 +52,11 @@ if __name__ == '__main__':
                                    doctag_vec=True,
                                    prefix='ent_',
                                    binary=True)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description="doc2vecをトレーニングする")
+    parser.add_argument("-i", "--input", type=str, required=True,
+                        help="タイトルとテキストをTSV化したファイルのパス e.g. 'data/20190114cirrus_all.tsv.bz2'")
+    args = parser.parse_args()
+    train(args)
