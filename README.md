@@ -1,17 +1,15 @@
 # pretrained doc2vec models on Japanese Wikipedia
 
-This is a repository of doc2vec models trained on Japanese Wikipedia corpus.
-
-Please See [my blog](https://yag-ays.github.io/project/pretrained_doc2vec_wikipedia/) for more details.
+This is a repository of doc2vec models trained on Japanese Wikipedia corpus, fork repo.
 
 ## Pretrained models
 
 - `dbow300d`
-  - https://www.dropbox.com/s/j75s0eq4eeuyt5n/jawiki.doc2vec.dbow300d.tar.bz2?dl=0
-  - Compressed file size: 5.48 GB
+  - https://d3d85262912lsj.cloudfront.net/jawiki.doc2vec.dbow300d.tar.bz2
+  - Compressed file size: 8.5 GB
 - `dmpv300d`
-  - https://www.dropbox.com/s/njez3f1pjv9i9xj/jawiki.doc2vec.dmpv300d.tar.bz2?dl=0
-  - Compressed file size: 8.86 GB
+  - https://d3d85262912lsj.cloudfront.net/jawiki.doc2vec.dmpv300d.tar.bz2
+  - Compressed file size: 13.6 GB
 
 
 ## Training
